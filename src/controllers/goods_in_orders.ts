@@ -98,11 +98,11 @@ export default class goods_in_orders{
     public set_id(id:number):void{
         this.id = id;
     }
-    public set_order_id(name:number):void{
-        this.order_id = this.order_id;
+    public set_order_id(order_id:number):void{
+        this.order_id = order_id;
     }
-    public set_good_id(name:number):void{
-        this.good_id = this.good_id;
+    public set_good_id(good_id:number):void{
+        this.good_id = good_id;
     }
 
     public get_id():number|undefined{

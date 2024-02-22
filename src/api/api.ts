@@ -3,15 +3,54 @@ import client from '../controllers/client';
 import area from '../controllers/area';
 import employees from '../controllers/employees';
 
-
+import goods from '../controllers/goods';
+import goods_in_orders  from '../controllers/goods_in_orders';
+import orders from '../controllers/order';
 
 
 
 const router = Router();
 
 router.get('/', async (req:Request,res:Response)=>{
+    let good = new goods({"id":1});
+    
+    await good.get_by_id().then(async (data)=>{
+        let f_good = good.to_map(data)
+        
+        console.log("------------------------\nGOODS ELEMS:\n");
+        f_good.forEach(el => {
+            console.log(el)
+        });
+        let need_ord = new goods_in_orders({"good_id":f_good[0].id})
+        await need_ord.get_by_good_id().then(async(data)=>{
+            let f_orders = need_ord.to_map(data);
+            console.log("-----------------\ng_in_ord:\n")
+            f_orders.forEach(el => {
+                console.log(el)
+            });
+            let mb_order = new orders({"id":f_orders[0].order_id})
+            await mb_order.get_by_id().then(async(data)=>{
+                let order = mb_order.to_map(data);
+                console.log("-----------------\nORDER:\n")
+                order.forEach(el => {
+                    console.log(el)
+                });
+                let mb_client = new client({"id":order[0].client_id})
+                await mb_client.get_by_id().then(async(data)=>{
+                    let client = mb_client.to_map(data);
+                    console.log("-----------------\Client:\n")
+                    client.forEach(el => {
+                        console.log(el)
+                    });
+                })
+            })
+        })
+    }).catch((err)=>{
+        console.log(err);
+    })
 
-    let new_empl = new employees({"full_name":"NEW EMPL", "phone_number":"NEW PHONE", "post":"MUZHIK"})
+
+    // let new_empl = new employees({"full_name":"NEW EMPL", "phone_number":"NEW PHONE", "post":"MUZHIK"})
     // await new_empl.insert().then((data)=>{
     //     if(data.affectedRows > 0)
     //         res.send("WELL DONE")
@@ -27,10 +66,10 @@ router.get('/', async (req:Request,res:Response)=>{
     //         res.send("Ed");
     // })
     
-    await new_empl.get_by_post().then((data)=>{
-        let empls = new_empl.to_map(data);
-        console.log(empls)
-    })
+    // await new_empl.get_by_post().then((data)=>{
+    //     let empls = new_empl.to_map(data);
+    //     console.log(empls)
+    // })
 
 
 
