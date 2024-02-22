@@ -18,6 +18,7 @@ interface EmployeesGetOptions {
 
 
 export default class employees_db{
+    // private table = 'employees'
     private static con:Promise<mysql.Connection>
     constructor(){
         employees_db.con = con.get_con();

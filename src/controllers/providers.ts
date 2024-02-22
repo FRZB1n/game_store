@@ -1,46 +1,42 @@
 import { ResultSetHeader } from "mysql2";
-import client_db from "../models/client";
-import IClientRow from '../models/client';
+import provider_db from "../models/providers";
+import IProviderRow from '../models/providers';
 
-interface ClientGetOptions {
+interface ProviderGetOptions {
     id?: number;
     full_name?: string;
     email?: string;
-    address?: string;
     phone_number?: string;
 }
 
 
-export default class client{
+export default class provider{
 
     private id?:number;
     private full_name?: string;
     private email?:string;
-    private address?:string;
     private phone_number?:string;
 
-    private db:client_db;
+    private db:provider_db;
 
-    constructor(options:ClientGetOptions){
+    constructor(options:ProviderGetOptions){
         this.id = options.id;
         this.full_name = options.full_name;
         this.email = options.email;
-        this.address = options.address;
         this.phone_number = options.phone_number;
 
-        this.db = new client_db();
+        this.db = new provider_db();
     }
 
-    public to_map(data:IClientRow[]):Array<ClientGetOptions>{
-        let users:Array<ClientGetOptions> = [];
+    public to_map(data:IProviderRow[]):Array<ProviderGetOptions>{
+        let users:Array<ProviderGetOptions> = [];
         
         data.forEach(el => {
-            let buf:ClientGetOptions={};
+            let buf:ProviderGetOptions={};
             buf.id = el[0];
             buf.full_name = el[1];
             buf.email = el[2];
-            buf.address = el[3];
-            buf.phone_number = el[4];
+            buf.phone_number = el[3];
             users.push(buf)
 
         });
@@ -51,11 +47,11 @@ export default class client{
         if(this.id)
             return await this.db.update(this);
         else
-            return Promise.reject("Empty user id")
+            return Promise.reject("Empty provider id")
     }
 
-    public async get_by_current_params():Promise<IClientRow[]>{
-        var params:ClientGetOptions = {};
+    public async get_by_current_params():Promise<IProviderRow[]>{
+        var params:ProviderGetOptions = {};
          
         if(this.id)
             params.id = this.id
@@ -63,49 +59,41 @@ export default class client{
             params.full_name = this.full_name
         if(this.email)
             params.email = this.email
-        if(this.address)
-            params.address = this.address
         if(this.phone_number)
             params.phone_number = this.phone_number
             
         
-        if(!params.address&&!params.email&&!params.full_name&&!params.id&&!params.phone_number)
+        if(!params.email&&!params.full_name&&!params.id&&!params.phone_number)
             return Promise.reject("No params set");
         else
-            return await this.db.get(params as ClientGetOptions);
+            return await this.db.get(params as ProviderGetOptions);
     }
-    public async get_all():Promise<IClientRow[]>{
+    public async get_all():Promise<IProviderRow[]>{
         return await this.db.get({});
     }
-    public async get_by_id():Promise<IClientRow[]>{
+    public async get_by_id():Promise<IProviderRow[]>{
         if(this.id)
             return await this.db.get({'id':this.id})
         else
-            return Promise.reject("Empty user id")
+            return Promise.reject("Empty provider id")
     }
-    public async get_by_full_name():Promise<IClientRow[]>{
+    public async get_by_full_name():Promise<IProviderRow[]>{
         if(this.full_name)
             return await this.db.get({'full_name':this.full_name});
         else
-            return Promise.reject("Empty user full_name")
+            return Promise.reject("Empty provider full_name")
     }
-    public async get_by_email():Promise<IClientRow[]>{
+    public async get_by_email():Promise<IProviderRow[]>{
         if(this.email)
             return await this.db.get({'email':this.email});
         else
-            return Promise.reject("Empty user email")
+            return Promise.reject("Empty provider email")
     }
-    public async get_by_address():Promise<IClientRow[]>{
-        if(this.address)
-            return await this.db.get({'address':this.address});
-        else
-            return Promise.reject("Empty user address")
-    }
-    public async get_by_phone_number():Promise<IClientRow[]>{
+    public async get_by_phone_number():Promise<IProviderRow[]>{
         if(this.phone_number)
             return await this.db.get({'phone_number':this.phone_number});
         else
-            return Promise.reject("Empty user phone_number")
+            return Promise.reject("Empty provider phone_number")
     }
     public async insert():Promise<ResultSetHeader>{
         return await this.db.insert(this);
@@ -121,9 +109,6 @@ export default class client{
     public set_email(email:string):void{
         this.email = email;
     }
-    public set_address(address:string):void{
-        this.address = address;
-    }
     public set_phone_number(phone_number:string):void{
         this.phone_number = phone_number;
     }
@@ -137,9 +122,7 @@ export default class client{
     public get_email():string|undefined{
         return this.email;
     }
-    public get_address():string|undefined{
-        return this.address;
-    }
+
     public get_phone_number():string|undefined{
         return this.phone_number;
     }

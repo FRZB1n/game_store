@@ -7,6 +7,7 @@ import goods from '../controllers/goods';
 import goods_in_orders  from '../controllers/goods_in_orders';
 import orders from '../controllers/order';
 
+import provider from '../controllers/providers';
 
 
 const router = Router();
@@ -21,6 +22,14 @@ router.get('/', async (req:Request,res:Response)=>{
         f_good.forEach(el => {
             console.log(el)
         });
+        let prov = new provider({"id":f_good[0].provider_id})
+        await prov.get_by_id().then(async(data)=>{
+            let n_prov = prov.to_map(data);
+            console.log("------------------\nProviders:\n");
+            n_prov.forEach(el => {
+                console.log(el)
+            });
+        })
         let need_ord = new goods_in_orders({"good_id":f_good[0].id})
         await need_ord.get_by_good_id().then(async(data)=>{
             let f_orders = need_ord.to_map(data);

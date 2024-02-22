@@ -17,6 +17,7 @@ interface OrdersGetOptions {
 
 
 export default class orders_db{
+    // private table = 'orders'
     private static con:Promise<mysql.Connection>
     constructor(){
         orders_db.con = con.get_con();

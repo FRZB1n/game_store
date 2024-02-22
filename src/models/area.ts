@@ -14,6 +14,7 @@ interface AreaGetOptions {
 
 
 export default class area_db{
+    // private table = 'clients'
     private static con:Promise<mysql.Connection>
     constructor(){
         area_db.con = con.get_con();

@@ -24,6 +24,7 @@ interface GoodsGetOptions {
 
 
 export default class goods_db{
+    // private table = 'goods'
     private static con:Promise<mysql.Connection>
     constructor(){
         goods_db.con = con.get_con();
