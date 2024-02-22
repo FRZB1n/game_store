@@ -5,7 +5,6 @@ import employees from '../controllers/employees'
 
 export default interface IEmployeesRow extends RowDataPacket{
     id: number;
-    name: string;
     full_name:string;
     post:string;
     phone_number:string;
