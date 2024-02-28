@@ -22,12 +22,44 @@ class client {
         this.phone_number = options.phone_number;
         this.db = new client_1.default();
     }
+    to_map(data) {
+        let users = [];
+        data.forEach(el => {
+            let buf = {};
+            buf.id = el[0];
+            buf.full_name = el[1];
+            buf.email = el[2];
+            buf.address = el[3];
+            buf.phone_number = el[4];
+            users.push(buf);
+        });
+        return users;
+    }
     update() {
         return __awaiter(this, void 0, void 0, function* () {
             if (this.id)
                 return yield this.db.update(this);
             else
                 return Promise.reject("Empty user id");
+        });
+    }
+    get_by_current_params() {
+        return __awaiter(this, void 0, void 0, function* () {
+            var params = {};
+            if (this.id)
+                params.id = this.id;
+            if (this.full_name)
+                params.full_name = this.full_name;
+            if (this.email)
+                params.email = this.email;
+            if (this.address)
+                params.address = this.address;
+            if (this.phone_number)
+                params.phone_number = this.phone_number;
+            if (!params.address && !params.email && !params.full_name && !params.id && !params.phone_number)
+                return Promise.reject("No params set");
+            else
+                return yield this.db.get(params);
         });
     }
     get_all() {
@@ -48,7 +80,7 @@ class client {
             if (this.full_name)
                 return yield this.db.get({ 'full_name': this.full_name });
             else
-                return Promise.reject("Empty user id");
+                return Promise.reject("Empty user full_name");
         });
     }
     get_by_email() {
@@ -70,7 +102,7 @@ class client {
     get_by_phone_number() {
         return __awaiter(this, void 0, void 0, function* () {
             if (this.phone_number)
-                return yield this.db.get({ 'address': this.address });
+                return yield this.db.get({ 'phone_number': this.phone_number });
             else
                 return Promise.reject("Empty user phone_number");
         });

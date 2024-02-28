@@ -11,20 +11,27 @@ interface AreaGetOptions {
 
 
 
-
+/**Area controller class */
 export default class area{
 
     private id?:number;
     private name?: string;
 
     private db:area_db;
-
+    /** 
+     * Class contructor
+     * 
+     * @param options requires id and name.
+     * 
+     *  
+        */
     constructor(options:AreaGetOptions){
         this.id = options.id;
         this.name = options.name;
       
         this.db = new area_db();
     }
+    /** This is a description of the foo function. */
     public to_map(data:IAreaRow[]):Array<AreaGetOptions>{
         let areas:Array<AreaGetOptions> = [];
         

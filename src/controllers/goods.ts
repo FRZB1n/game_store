@@ -98,7 +98,7 @@ export default class goods{
         if(this.id)
             return await this.db.get({'id':this.id})
         else
-            return Promise.reject("Empty employee id")
+            return Promise.reject("Empty good id")
     }
     public async get_by_name():Promise<IGoodsRow[]>{
         if(this.name)

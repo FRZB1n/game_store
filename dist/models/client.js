@@ -22,23 +22,24 @@ class client_db {
             let sql = "UPDATE `clients` SET ";
             let params = [];
             if (obj.get_full_name() != undefined) {
-                sql += "`full_name = ?,`";
+                sql += "`full_name` = ?,";
                 params.push(obj.get_full_name());
             }
             if (obj.get_email() != undefined) {
-                sql += "`email = ?,`";
+                sql += "`email` = ?,";
                 params.push(obj.get_email());
             }
             if (obj.get_address() != undefined) {
-                sql += "`address = ?,`";
+                sql += "`address` = ?,";
                 params.push(obj.get_address());
             }
             if (obj.get_phone_number() != undefined) {
-                sql += "`phone_number = ?,`";
+                sql += "`phone_number` = ?,";
                 params.push(obj.get_phone_number());
             }
-            sql += "WHERE `id` = ?";
-            params.push(obj.get_id());
+            sql += " `id`= ? WHERE `id` = ?";
+            params.push(obj.get_id(), obj.get_id());
+            console.log(sql);
             const [res, f] = yield (yield client_db.con).query(sql, params);
             return res;
         });

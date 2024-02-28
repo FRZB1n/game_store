@@ -12,8 +12,10 @@ import provider from '../controllers/providers';
 
 const router = Router();
 
-router.get('/', async (req:Request,res:Response)=>{
-    let good = new goods({"id":1});
+router.post('/kl', async (req:Request,res:Response)=>{
+    const {id} = req.body;
+    console.log(id);
+    let good = new goods({"id":id});
     
     await good.get_by_id().then(async (data)=>{
         let f_good = good.to_map(data)
@@ -44,10 +46,18 @@ router.get('/', async (req:Request,res:Response)=>{
                 order.forEach(el => {
                     console.log(el)
                 });
+                let mb_employee = new employees({"id":order[0].employee_id});
+                await mb_employee.get_by_id().then(async (data)=>{
+                    let employee = mb_employee.to_map(data);
+                    console.log("-----------------\nEmployee:\n")
+                    employee.forEach(el => {
+                        console.log(el.full_name)
+                    });
+                })
                 let mb_client = new client({"id":order[0].client_id})
                 await mb_client.get_by_id().then(async(data)=>{
                     let client = mb_client.to_map(data);
-                    console.log("-----------------\Client:\n")
+                    console.log("-----------------\nClient:\n")
                     client.forEach(el => {
                         console.log(el)
                     });
