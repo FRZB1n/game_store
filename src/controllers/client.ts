@@ -8,6 +8,10 @@ interface ClientGetOptions {
     email?: string;
     address?: string;
     phone_number?: string;
+
+    role?:number;
+    balance?:number;
+    pass?:string;
 }
 
 
@@ -19,6 +23,10 @@ export default class client{
     private address?:string;
     private phone_number?:string;
 
+    private role?:number;
+    private balance?:number;
+    private pass?:string;
+
     private db:client_db;
 
     constructor(options:ClientGetOptions){
@@ -28,10 +36,14 @@ export default class client{
         this.address = options.address;
         this.phone_number = options.phone_number;
 
+        this.role = options.role;
+        this.balance = options.balance;
+        this.pass = options.pass;
+
         this.db = new client_db();
     }
 
-    public to_map(data:IClientRow[]):Array<ClientGetOptions>{
+    public static to_map(data:IClientRow[]):Array<ClientGetOptions>{
         let users:Array<ClientGetOptions> = [];
         
         data.forEach(el => {
@@ -41,6 +53,10 @@ export default class client{
             buf.email = el[2];
             buf.address = el[3];
             buf.phone_number = el[4];
+
+            buf.role = el[5];
+            buf.balance = el[6];
+            buf.pass = el[7];
             users.push(buf)
 
         });
@@ -67,9 +83,16 @@ export default class client{
             params.address = this.address
         if(this.phone_number)
             params.phone_number = this.phone_number
+
+        if(this.role)
+            params.role = this.role
+        if(this.balance)
+            params.balance = this.balance
+        if(this.pass)
+            params.pass = this.pass
             
         
-        if(!params.address&&!params.email&&!params.full_name&&!params.id&&!params.phone_number)
+        if(!params.pass&&!params.balance&&!params.role&&!params.address&&!params.email&&!params.full_name&&!params.id&&!params.phone_number)
             return Promise.reject("No params set");
         else
             return await this.db.get(params as ClientGetOptions);
@@ -107,6 +130,25 @@ export default class client{
         else
             return Promise.reject("Empty user phone_number")
     }
+
+    public async get_by_role():Promise<IClientRow[]>{
+        if(this.role)
+            return await this.db.get({'role':this.role});
+        else
+            return Promise.reject("Empty user role")
+    }
+    public async get_by_balance():Promise<IClientRow[]>{
+        if(this.balance)
+            return await this.db.get({'balance':this.balance});
+        else
+            return Promise.reject("Empty user balance")
+    }
+    public async get_by_pass():Promise<IClientRow[]>{
+        if(this.pass)
+            return await this.db.get({'pass':this.pass});
+        else
+            return Promise.reject("Empty user pass")
+    }
     public async insert():Promise<ResultSetHeader>{
         return await this.db.insert(this);
     }
@@ -128,6 +170,16 @@ export default class client{
         this.phone_number = phone_number;
     }
 
+    public set_balance(balance:number):void{
+        this.balance = balance;
+    }
+    public set_role(role:number):void{
+        this.role = role;
+    }
+    public set_pass(pass:string):void{
+        this.pass = pass;
+    }
+
     public get_id():number|undefined{
         return this.id;
     }
@@ -142,6 +194,16 @@ export default class client{
     }
     public get_phone_number():string|undefined{
         return this.phone_number;
+    }
+
+    public get_balance():number|undefined{
+        return this.balance;
+    }
+    public get_role():number|undefined{
+        return this.role;
+    }
+    public get_pass():string|undefined{
+        return this.pass;
     }
 
 

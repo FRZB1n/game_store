@@ -1,10 +1,10 @@
 import { ResultSetHeader } from "mysql2/promise";
-import area_db from "../models/area"
-import IAreaRow from "../models/area";
+import game_db from "../models/game"
+import IGameRow from "../models/game";
 
 
 
-interface AreaGetOptions {
+interface GameGetOptions {
     id?: number;
     name?:string;
 }
@@ -12,12 +12,12 @@ interface AreaGetOptions {
 
 
 /**Area controller class */
-export default class area{
+export default class game{
 
     private id?:number;
     private name?: string;
 
-    private db:area_db;
+    private db:game_db;
     /** 
      * Class contructor
      * 
@@ -25,18 +25,18 @@ export default class area{
      * 
      *  
         */
-    constructor(options:AreaGetOptions){
+    constructor(options:GameGetOptions){
         this.id = options.id;
         this.name = options.name;
       
-        this.db = new area_db();
+        this.db = new game_db();
     }
     /** This is a description of the foo function. */
-    public to_map(data:IAreaRow[]):Array<AreaGetOptions>{
-        let areas:Array<AreaGetOptions> = [];
+    public to_map(data:IGameRow[]):Array<GameGetOptions>{
+        let areas:Array<GameGetOptions> = [];
         
         data.forEach(el => {
-            let buf:AreaGetOptions={};
+            let buf:GameGetOptions={};
             buf.id = el[0];
             buf.name = el[1];
             areas.push(buf)
@@ -50,12 +50,12 @@ export default class area{
         if(this.id)
             return await this.db.update(this);
         else
-            return Promise.reject("Empty area id")
+            return Promise.reject("Empty game id")
     }
 
 
-    public async get_by_current_params():Promise<IAreaRow[]>{
-        var params:AreaGetOptions = {};
+    public async get_by_current_params():Promise<IGameRow[]>{
+        var params:GameGetOptions = {};
          
         if(this.id)
             params.id = this.id
@@ -67,24 +67,24 @@ export default class area{
         if(!params.name&&!params.id)
             return Promise.reject("No params set");
         else
-            return await this.db.get(params as AreaGetOptions);
+            return await this.db.get(params as GameGetOptions);
     }
 
-    public async get_all():Promise<IAreaRow[]>{
+    public async get_all():Promise<IGameRow[]>{
         return await this.db.get({});
     }
 
-    public async get_by_id():Promise<IAreaRow[]>{
+    public async get_by_id():Promise<IGameRow[]>{
         if(this.id)
             return await this.db.get({'id':this.id})
         else
-            return Promise.reject("Empty area id")
+            return Promise.reject("Empty game id")
     }
-    public async get_by_name():Promise<IAreaRow[]>{
+    public async get_by_name():Promise<IGameRow[]>{
         if(this.name)
             return await this.db.get({'name':this.name});
         else
-            return Promise.reject("Empty area name")
+            return Promise.reject("Empty game name")
     }
 
     public async insert():Promise<ResultSetHeader>{

@@ -8,6 +8,10 @@ interface ClientGetOptions {
     email?: string;
     address?: string;
     phone_number?: string;
+
+    role?:number;
+    balance?:number;
+    pass?:string;
 }
 
 
@@ -18,6 +22,10 @@ export default interface IClientRow extends RowDataPacket{
     email: string;
     address: string;
     phone_number: string;
+
+    role:number;
+    balance:number;
+    pass:string;
 }
 
 export default class client_db{
@@ -46,6 +54,19 @@ export default class client_db{
             sql+="`phone_number` = ?,";
             params.push(obj.get_phone_number());
         }
+
+        if(obj.get_role() != undefined){
+            sql+="`role` = ?,";
+            params.push(obj.get_role());
+        }
+        if(obj.get_pass() != undefined){
+            sql+="`pass` = ?,";
+            params.push(obj.get_pass());
+        }
+        if(obj.get_balance() != undefined){
+            sql+="`balance` = ?,";
+            params.push(obj.get_balance());
+        }
         
         sql += " `id`= ? WHERE `id` = ?"
         
@@ -59,12 +80,16 @@ export default class client_db{
         return res as ResultSetHeader
     }
     public async insert(obj:client):Promise<ResultSetHeader>{
-        let sql:string = "INSERT INTO `clients`(`full_name`, `email`, `address`, `phone_number`) VALUES (?,?,?,?)"
+        let sql:string = "INSERT INTO `clients`(`full_name`, `email`, `address`, `phone_number`,`role`,`balance`,`pass`) VALUES (?,?,?,?,?,?,?)"
         const [results, fields] = await (await client_db.con).query(sql,[
             obj.get_full_name() == undefined ? '' : obj.get_full_name(),
             obj.get_email()== undefined ? '' : obj.get_email(),
             obj.get_address()== undefined ? '' : obj.get_address(),
-            obj.get_phone_number()== undefined ? '' : obj.get_phone_number()
+            obj.get_phone_number()== undefined ? '' : obj.get_phone_number(),
+
+            obj.get_role()== undefined ? '' : obj.get_role(),
+            obj.get_balance()== undefined ? '' : obj.get_balance(),
+            obj.get_pass()== undefined ? '' : obj.get_pass(),
         ])
         return results as ResultSetHeader;
    
@@ -95,6 +120,19 @@ export default class client_db{
         if(options.phone_number){
             sql+=" AND `phone_number` = ?"
             params.push(options.phone_number)
+        }
+
+        if(options.role){
+            sql+=" AND `role` = ?"
+            params.push(options.role)
+        }
+        if(options.balance){
+            sql+=" AND `balance` = ?"
+            params.push(options.balance)
+        }
+        if(options.pass){
+            sql+=" AND `pass` = ?"
+            params.push(options.pass)
         }
         
         const [res, fl] = await (await client_db.con).query(

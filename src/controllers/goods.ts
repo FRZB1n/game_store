@@ -6,10 +6,10 @@ import IGoodsRow from "../models/goods";
 interface GoodsGetOptions {
     id?: number;
     name?: string;
-    provider_id?:number;
-    unit_price?:number;
-    unit?:string;
-    area_id?:number;
+    seller?:number;
+    description?:string;
+    cost?:number;
+    game_id?:number;
     amount?:number;
 }
 
@@ -18,10 +18,10 @@ interface GoodsGetOptions {
 export default class goods{
     private id?: number;
     private name?: string;
-    private provider_id?:number;
-    private unit_price?:number;
-    private unit?:string;
-    private area_id?:number;
+    private seller?:number;
+    private description?:string;
+    private cost?:number;
+    private game_id?:number;
     private amount?:number;
     
 
@@ -30,10 +30,10 @@ export default class goods{
     constructor(options:GoodsGetOptions){
         this.id = options.id;
         this.name = options.name;
-        this.provider_id = options.provider_id;
-        this.unit_price = options.unit_price;
-        this.unit = options.unit;
-        this.area_id = options.area_id;
+        this.seller = options.seller;
+        this.description = options.description;
+        this.cost = options.cost;
+        this.game_id = options.game_id;
         this.amount = options.amount;
       
         this.db = new goods_db();
@@ -45,10 +45,10 @@ export default class goods{
             let buf:GoodsGetOptions={};
             buf.id = el[0];
             buf.name = el[1];
-            buf.provider_id = el[2];
-            buf.unit_price = el[3];
-            buf.unit = el[4];
-            buf.area_id = el[5];
+            buf.seller = el[2];
+            buf.description = el[3];
+            buf.cost = el[4];
+            buf.game_id = el[5];
             buf.amount = el[6];
             goods.push(buf)
 
@@ -71,20 +71,20 @@ export default class goods{
             params.id = this.id
         if(this.name)
             params.name = this.name
-        if(this.provider_id)
-            params.provider_id = this.provider_id
-        if(this.unit_price)
-            params.unit_price = this.unit_price
-        if(this.unit)
-            params.unit = this.unit
-        if(this.area_id)
-            params.area_id = this.area_id
+        if(this.seller)
+            params.seller = this.seller
+        if(this.description)
+            params.description = this.description
+        if(this.cost)
+            params.cost = this.cost
+        if(this.game_id)
+            params.game_id = this.game_id
         if(this.amount)
             params.amount = this.amount
         
             
         
-        if(!params.name&&!params.id&&!params.provider_id&&!params.unit_price&&!params.unit&&!params.area_id&&!params.amount)
+        if(!params.name&&!params.id&&!params.seller&&!params.description&&!params.cost&&!params.game_id&&!params.amount)
             return Promise.reject("No params set");
         else
             return await this.db.get(params as GoodsGetOptions);
@@ -106,32 +106,32 @@ export default class goods{
         else
             return Promise.reject("Empty good name")
     }
-    public async get_by_provider_id():Promise<IGoodsRow[]>{
-        if(this.provider_id)
-            return await this.db.get({'provider_id':this.provider_id});
+    public async get_by_seller_id():Promise<IGoodsRow[]>{
+        if(this.seller)
+            return await this.db.get({'seller':this.seller});
         else
-            return Promise.reject("Empty good provider_id")
+            return Promise.reject("Empty good seller")
     }
-    public async get_by_unit_price():Promise<IGoodsRow[]>{
-        if(this.unit_price)
-            return await this.db.get({'unit_price':this.unit_price});
+    public async get_by_description():Promise<IGoodsRow[]>{
+        if(this.description)
+            return await this.db.get({'description':this.description});
         else
-            return Promise.reject("Empty good unit_price")
+            return Promise.reject("Empty good description")
     }
-    public async get_by_unit():Promise<IGoodsRow[]>{
-        if(this.unit)
-            return await this.db.get({'unit':this.unit});
+    public async get_by_cost():Promise<IGoodsRow[]>{
+        if(this.cost)
+            return await this.db.get({'cost':this.cost});
         else
-            return Promise.reject("Empty good unit")
+            return Promise.reject("Empty good cost")
     }
-    public async get_by_area_id():Promise<IGoodsRow[]>{
-        if(this.area_id)
-            return await this.db.get({'area_id':this.area_id});
+    public async get_by_game_id():Promise<IGoodsRow[]>{
+        if(this.game_id)
+            return await this.db.get({'game_id':this.game_id});
         else
-            return Promise.reject("Empty good area_id")
+            return Promise.reject("Empty good game_id")
     }
     public async get_by_amount():Promise<IGoodsRow[]>{
-        if(this.unit_price)
+        if(this.amount)
             return await this.db.get({'amount':this.amount});
         else
             return Promise.reject("Empty good amount")
@@ -148,21 +148,23 @@ export default class goods{
     public set_name(name:string):void{
         this.name = name;
     }
-    public set_provider_id(provider_id:number):void{
-        this.provider_id = provider_id;
+    public set_seller(seller:number):void{
+        this.seller = seller;
     }
 
-    public set_unit(unit:string):void{
-        this.unit = unit;
+    public set_description(description:string):void{
+        this.description = description;
     }
-    public set_area_id(area_id:number):void{
-        this.area_id = area_id;
-    }
-    
-    public set_amount(amount:number):void{
-        this.amount = amount;
+    public set_game_id(game_id:number):void{
+        this.game_id = game_id;
     }
     
+    public set_cost(cost:number):void{
+        this.cost = cost;
+    }
+    public set_amount(cost:number):void{
+        this.cost = cost;
+    }
 
 
     public get_id():number|undefined {
@@ -171,20 +173,20 @@ export default class goods{
     public get_name():string|undefined {
         return this.name
     }
-    public get_provider_id():number|undefined {
-        return this.provider_id
+    public get_seller():number|undefined {
+        return this.seller
     }
-    public get_unit_price():number|undefined {
-        return this.unit_price
-    }
-    public get_unit():string|undefined {
-        return this.unit
-    }
-    public get_area_id():number|undefined {
-        return this.area_id
+    public get_cost():number|undefined {
+        return this.cost
     }
     public get_amount():number|undefined {
         return this.amount
+    }
+    public get_game_id():number|undefined {
+        return this.game_id
+    }
+    public get_description():string|undefined {
+        return this.description
     }
 
 }

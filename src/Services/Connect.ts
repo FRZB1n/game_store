@@ -11,7 +11,7 @@ export default class con{
                 'port':3306,
                 'user':'root',
                 'password':'',
-                'database':'storage',
+                'database':'bir',
                 'rowsAsArray':true
             })
             
